@@ -21,6 +21,13 @@ app = FastAPI(
     ),
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origin_list,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Health is unversioned; business endpoints live under /api/v1.
 app.include_router(health.router)
 app.include_router(api_router, prefix=settings.api_v1_prefix)
