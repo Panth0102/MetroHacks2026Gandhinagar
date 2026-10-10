@@ -1,0 +1,110 @@
+[
+  {
+    "space_code": "STN01-S02",
+    "tenant_name": "AdWorks #49",
+    "monthly_rent": 122000.0,
+    "start_date": "2025-09-02",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN01-S04",
+    "tenant_name": "AdWorks #8",
+    "monthly_rent": 176000.0,
+    "start_date": "2025-11-01",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN02-S02",
+    "tenant_name": "QuickMart #64",
+    "monthly_rent": 199000.0,
+    "start_date": "2025-12-12",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN03-S02",
+    "tenant_name": "BookNook #10",
+    "monthly_rent": 160000.0,
+    "start_date": "2026-03-11",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN04-S03",
+    "tenant_name": "Chai Point #60",
+    "monthly_rent": 191000.0,
+    "start_date": "2026-01-19",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN04-S05",
+    "tenant_name": "StyleHub #24",
+    "monthly_rent": 123000.0,
+    "start_date": "2025-11-28",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN05-S02",
+    "tenant_name": "Chai Point #67",
+    "monthly_rent": 174000.0,
+    "start_date": "2025-10-31",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN05-S04",
+    "tenant_name": "Chai Point #16",
+    "monthly_rent": 154000.0,
+    "start_date": "2026-03-03",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN05-S06",
+    "tenant_name": "QuickMart #74",
+    "monthly_rent": 150000.0,
+    "start_date": "2026-02-23",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN06-S04",
+    "tenant_name": "StyleHub #85",
+    "monthly_rent": 190000.0,
+    "start_date": "2025-11-14",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN07-S01",
+    "tenant_name": "Chai Point #47",
+    "monthly_rent": 110000.0,
+    "start_date": "2026-03-16",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  },
+  {
+    "space_code": "STN08-S05",
+    "tenant_name": "Chai Point #22",
+    "monthly_rent": 172000.0,
+    "start_date": "2026-07-04",
+    "end_date": null,
+    "status": "active",
+    "notes": "synthetic lease"
+  }
+]

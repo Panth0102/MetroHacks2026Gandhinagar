@@ -1,0 +1,58 @@
+[
+  {
+    "code": "STN01",
+    "name": "Riverfront Central",
+    "line": "Blue Line",
+    "station_type": "interchange",
+    "location_description": null
+  },
+  {
+    "code": "STN02",
+    "name": "Old Town Bazaar",
+    "line": "Blue Line",
+    "station_type": "underground",
+    "location_description": null
+  },
+  {
+    "code": "STN03",
+    "name": "Tech Park East",
+    "line": "Red Line",
+    "station_type": "elevated",
+    "location_description": null
+  },
+  {
+    "code": "STN04",
+    "name": "University Gate",
+    "line": "Red Line",
+    "station_type": "elevated",
+    "location_description": null
+  },
+  {
+    "code": "STN05",
+    "name": "Stadium Junction",
+    "line": "Blue Line",
+    "station_type": "interchange",
+    "location_description": null
+  },
+  {
+    "code": "STN06",
+    "name": "Lakeview",
+    "line": "Green Line",
+    "station_type": "elevated",
+    "location_description": null
+  },
+  {
+    "code": "STN07",
+    "name": "Airport Link",
+    "line": "Green Line",
+    "station_type": "underground",
+    "location_description": null
+  },
+  {
+    "code": "STN08",
+    "name": "Industrial Estate",
+    "line": "Red Line",
+    "station_type": "at-grade",
+    "location_description": null
+  }
+]

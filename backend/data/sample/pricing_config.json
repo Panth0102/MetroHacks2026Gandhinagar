@@ -1,0 +1,21 @@
+{
+  "version": "v1.0-heuristic",
+  "is_active": true,
+  "base_rate_per_sqm": 1800.0,
+  "base_panel_rate": 45000.0,
+  "reference_daily_footfall": 20000,
+  "footfall_elasticity": 0.3,
+  "min_footfall_factor": 0.6,
+  "max_footfall_factor": 1.8,
+  "reference_visibility": 5.0,
+  "visibility_weight": 0.08,
+  "min_visibility_factor": 0.7,
+  "max_visibility_factor": 1.4,
+  "space_type_multipliers": {
+    "retail": 1.0,
+    "kiosk": 0.85,
+    "advertising_panel": 1.2,
+    "digital_screen": 1.5
+  },
+  "source_notes": "Indicative assumptions for the Phase 1 demo; not market-verified."
+}
