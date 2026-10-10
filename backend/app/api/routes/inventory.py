@@ -8,7 +8,8 @@ from app.db.models.commercial_space import CommercialSpace, SpaceStatus, SpaceTy
 from app.db.session import get_db
 from app.schemas.commercial_space import InventorySummary, SpaceOut
 from app.schemas.common import Page
-from app.services import inventory_service
+from app.schemas.proposal import TenantRecommendationResult
+from app.services import inventory_service, tenant_recommendation_service
 
 router = APIRouter(prefix="/inventory", tags=["inventory"])
 
@@ -58,3 +59,11 @@ def get_space(space_id: int, db: Session = Depends(get_db)) -> SpaceOut:
     if space is None:
         raise HTTPException(status_code=404, detail="Commercial space not found")
     return SpaceOut.model_validate(space)
+
+
+@router.get("/{space_id}/tenant-recommendations", response_model=TenantRecommendationResult)
+def tenant_recommendations(space_id: int, db: Session = Depends(get_db)) -> TenantRecommendationResult:
+    try:
+        return tenant_recommendation_service.recommend_tenants(db, space_id)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc

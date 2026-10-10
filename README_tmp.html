@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>README.md</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+html,footer,header{
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Custom MD PDF CSS
+ */
+html,footer,header{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+
+ }
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///Users/panthsutaria/Desktop/Extra%20Work/Hackathon/2026/Metro%20Hack/Project/R%3A%5C2.Travail%5C1.Enseignement%5CCours%5C_1.Outils%5C2.Developpement%5C1.SCSS%5Cmain.css" type="text/css"><link rel="stylesheet" href="file:///Users/panthsutaria/Desktop/Extra%20Work/Hackathon/2026/Metro%20Hack/Project/D%3A%5Crdaros%5CCours%5C_1.Outils%5C2.Developpement%5C1.SCSS%5Cmain.css" type="text/css">
+</head>
+
+<body>
+    <h1 id="metro-revenue-intelligence">Metro Revenue Intelligence</h1>
+<p><strong>Turning Metro Station Footfall into Revenue Opportunities</strong></p>
+<p>Metro Revenue Intelligence is a data-driven platform designed to help metro operators monetize vacant retail spaces and advertising panels. It analyzes passenger footfall, identifies commercially valuable locations, recommends indicative prices, and generates data-backed sales proposals for prospective tenants and advertisers.</p>
+<p>Built for <strong>Metro Hacks — Problem Statement PS-06: Footfall to Revenue</strong>.</p>
+<hr>
+<h2 id="problem-statement">Problem Statement</h2>
+<p>Metro stations attract large numbers of passengers, making them valuable locations for retail businesses and advertising. However, metro operators may struggle to demonstrate the commercial value of vacant spaces and advertising panels.</p>
+<p>Without clear footfall insights and data-backed pricing, it becomes difficult to set competitive rates, identify high-potential locations, and convince prospective tenants or advertisers to invest.</p>
+<h2 id="our-solution">Our Solution</h2>
+<p>Metro Revenue Intelligence converts station footfall data into actionable commercial insights.</p>
+<p>The platform aims to help metro operators understand passenger traffic patterns, evaluate vacant commercial inventory, estimate potential revenue, and generate sales proposals supported by data.</p>
+<h2 id="key-features">Key Features</h2>
+<ol>
+<li><strong>Footfall Analytics</strong> — Analyze passenger traffic by station, date, and time to identify high-footfall locations and peak periods.</li>
+<li><strong>Commercial Inventory Management</strong> — Track vacant and occupied retail spaces and advertising panels, including their locations and characteristics.</li>
+<li><strong>Smart Rate Cards</strong> — Calculate explainable, indicative prices using footfall and commercial-space attributes.</li>
+<li><strong>Revenue Opportunity Ranking</strong> — Rank vacant spaces by estimated commercial potential and highlight opportunities for improving revenue.</li>
+<li><strong>AI-Powered Sales Proposals</strong> — Generate data-backed sales pitches and downloadable PDF proposals for prospective tenants and advertisers.</li>
+</ol>
+<h2 id="target-users">Target Users</h2>
+<ul>
+<li><strong>Metro Operators:</strong> Improve commercial space utilization and revenue planning.</li>
+<li><strong>Commercial Revenue Teams:</strong> Evaluate inventory, prepare rate cards, and prioritize sales opportunities.</li>
+<li><strong>Retail Businesses:</strong> Identify potentially valuable locations inside metro stations.</li>
+<li><strong>Advertisers and Agencies:</strong> Compare advertising opportunities across stations.</li>
+</ul>
+<h2 id="technology-stack">Technology Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td>React, TypeScript, Vite</td>
+</tr>
+<tr>
+<td>UI and Styling</td>
+<td>Tailwind CSS, shadcn/ui</td>
+</tr>
+<tr>
+<td>Data Visualization</td>
+<td>Recharts</td>
+</tr>
+<tr>
+<td>Icons</td>
+<td>Lucide</td>
+</tr>
+<tr>
+<td>Backend API</td>
+<td>Python, FastAPI</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td>ORM and Migrations</td>
+<td>SQLAlchemy, Alembic</td>
+</tr>
+<tr>
+<td>Data Analytics</td>
+<td>Pandas, NumPy</td>
+</tr>
+<tr>
+<td>AI Integration</td>
+<td>Claude API</td>
+</tr>
+<tr>
+<td>Testing</td>
+<td>Pytest, Vitest, Playwright</td>
+</tr>
+<tr>
+<td>Development</td>
+<td>Claude Code, Git, GitHub</td>
+</tr>
+</tbody>
+</table>
+<h2 id="system-architecture">System Architecture</h2>
+<pre class="hljs"><code><div>Footfall Data + Commercial Inventory
+                  |
+                  v
+        FastAPI Backend
+                  |
+                  v
+      Analytics and Pricing Engine
+                  |
+          +-------+-------+
+          |               |
+          v               v
+    PostgreSQL       Revenue Insights
+          |               |
+          +-------+-------+
+                  |
+                  v
+       React Dashboard
+                  |
+                  v
+     AI Sales Proposal Generator
+                  |
+                  v
+       PDF and CSV Exports
+</div></code></pre>
+<h2 id="how-it-works">How It Works</h2>
+<ol>
+<li><strong>Load data:</strong> Import or generate station footfall records and commercial inventory information.</li>
+<li><strong>Analyze traffic:</strong> Calculate station-level passenger volumes, peak hours, and traffic trends.</li>
+<li><strong>Evaluate inventory:</strong> Identify vacant retail spaces and advertising panels.</li>
+<li><strong>Estimate prices:</strong> Apply a transparent pricing model to calculate indicative commercial rates.</li>
+<li><strong>Identify opportunities:</strong> Rank available spaces using their estimated commercial potential.</li>
+<li><strong>Generate proposals:</strong> Use validated analytics to prepare sales proposals for prospective tenants and advertisers.</li>
+<li><strong>Export results:</strong> Download rate cards, analytical reports, and sales proposals in supported formats.</li>
+</ol>
+<h2 id="data-and-pricing-methodology">Data and Pricing Methodology</h2>
+<p>The prototype is designed to support realistic sample data because a production metro footfall dataset may not be available during the hackathon.</p>
+<p>The analytics may include:</p>
+<ul>
+<li>Station-wise passenger footfall</li>
+<li>Hourly and daily traffic patterns</li>
+<li>Retail and advertising inventory</li>
+<li>Occupancy and vacancy status</li>
+<li>Indicative rental prices</li>
+<li>Potential revenue scenarios</li>
+</ul>
+<p><strong>Important:</strong> Sample data is synthetic unless explicitly identified otherwise. Pricing recommendations and revenue forecasts are estimates for decision support, not guaranteed earnings or validated market rates.</p>
+<p>Footfall indicates potential exposure, but it does not independently establish advertising impressions, customer conversion, or actual sales.</p>
+<h2 id="project-development-phases">Project Development Phases</h2>
+<h3 id="phase-1--backend-and-analytics">Phase 1 — Backend and Analytics</h3>
+<ul>
+<li>Set up the backend and database.</li>
+<li>Create realistic, reproducible sample datasets.</li>
+<li>Implement footfall analytics and inventory management.</li>
+<li>Develop explainable pricing and revenue opportunity calculations.</li>
+<li>Expose analytics through REST APIs.</li>
+</ul>
+<h3 id="phase-2--frontend-and-integration">Phase 2 — Frontend and Integration</h3>
+<ul>
+<li>Build the interactive analytics dashboard.</li>
+<li>Add station-level visualizations and inventory filters.</li>
+<li>Display rate cards, vacancy rankings, and revenue scenarios.</li>
+<li>Connect the frontend to the backend APIs.</li>
+</ul>
+<h3 id="phase-3--ai-intelligence-and-reporting">Phase 3 — AI Intelligence and Reporting</h3>
+<ul>
+<li>Generate AI-assisted sales proposals.</li>
+<li>Produce downloadable, one-page PDF proposals.</li>
+<li>Support CSV exports and commercial reporting.</li>
+<li>Add recommendations for potential tenants and advertising opportunities.</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>Install the following before running the project:</p>
+<ul>
+<li>Python 3.11 or a compatible version supported by the project's dependencies</li>
+<li>Node.js and npm</li>
+<li>PostgreSQL</li>
+<li>Git</li>
+</ul>
+<h3 id="1-clone-the-repository">1. Clone the Repository</h3>
+<pre class="hljs"><code><div>git <span class="hljs-built_in">clone</span> &lt;YOUR_GITHUB_REPOSITORY_URL&gt;
+<span class="hljs-built_in">cd</span> metro-revenue-intelligence
+</div></code></pre>
+<p>Replace the repository URL with your actual GitHub repository URL.</p>
+<h3 id="2-configure-the-backend">2. Configure the Backend</h3>
+<pre class="hljs"><code><div><span class="hljs-built_in">cd</span> backend
+python3 -m venv .venv
+<span class="hljs-built_in">source</span> .venv/bin/activate
+pip install -r requirements.txt
+</div></code></pre>
+<p>Create a <code>.env</code> file using the project's <code>.env.example</code> as a reference.</p>
+<p>Example configuration:</p>
+<pre class="hljs"><code><div>DATABASE_URL=postgresql+psycopg://USER:PASSWORD@localhost:5432/metro_revenue
+ANTHROPIC_API_KEY=
+</div></code></pre>
+<p>Replace the database credentials with your local PostgreSQL configuration. Keep API keys and credentials out of version control.</p>
+<h3 id="3-set-up-postgresql">3. Set Up PostgreSQL</h3>
+<p>Create the project database:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">DATABASE</span> metro_revenue;
+</div></code></pre>
+<p>Run the database migrations and sample-data initialization commands documented in the backend setup instructions.</p>
+<h3 id="4-start-the-backend">4. Start the Backend</h3>
+<p>From the backend directory, activate the virtual environment and run:</p>
+<pre class="hljs"><code><div>uvicorn app.main:app --reload
+</div></code></pre>
+<p>The API will normally be available at:</p>
+<ul>
+<li>API base URL: <code>http://127.0.0.1:8000</code></li>
+<li>Interactive API documentation: <code>http://127.0.0.1:8000/docs</code></li>
+</ul>
+<h3 id="5-start-the-frontend">5. Start the Frontend</h3>
+<p>Open a second terminal:</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">cd</span> frontend
+npm install
+npm run dev
+</div></code></pre>
+<p>Open the local URL printed by Vite in your browser.</p>
+<blockquote>
+<p><strong>Setup note:</strong> These commands assume the repository uses <code>backend/</code> and <code>frontend/</code> directories. Adjust them to match the actual project structure and scripts.</p>
+</blockquote>
+<h2 id="testing">Testing</h2>
+<p>Run the tests supported by each project component.</p>
+<p><strong>Backend:</strong></p>
+<pre class="hljs"><code><div>pytest
+</div></code></pre>
+<p><strong>Frontend:</strong></p>
+<pre class="hljs"><code><div>npm run <span class="hljs-built_in">test</span>
+</div></code></pre>
+<p><strong>Production build:</strong></p>
+<pre class="hljs"><code><div>npm run build
+</div></code></pre>
+<p>Use the scripts actually defined in the repository's configuration files.</p>
+<h2 id="security-and-reliability">Security and Reliability</h2>
+<ul>
+<li>Store secrets in environment variables.</li>
+<li>Validate API inputs and database operations.</li>
+<li>Keep pricing calculations deterministic and explainable.</li>
+<li>Use AI to communicate validated results rather than invent financial figures.</li>
+<li>Handle missing data and API failures gracefully.</li>
+<li>Clearly label synthetic data, assumptions, and estimates.</li>
+<li>Provide an editable proposal template if AI services are not configured.</li>
+</ul>
+<h2 id="expected-impact">Expected Impact</h2>
+<p>Metro Revenue Intelligence aims to help metro operators:</p>
+<ul>
+<li>Reduce the time required to evaluate vacant commercial inventory.</li>
+<li>Make pricing recommendations more consistent and transparent.</li>
+<li>Prioritize potentially valuable retail and advertising locations.</li>
+<li>Prepare sales materials more efficiently.</li>
+<li>Make better-informed commercial revenue decisions.</li>
+</ul>
+<p>Actual revenue improvements would need to be validated using real footfall data, market rental rates, occupancy records, and observed commercial performance.</p>
+<h2 id="current-project-status">Current Project Status</h2>
+<p>The project is being developed in three phases: backend analytics, frontend integration, and AI-assisted reporting.</p>
+<p>Features should be marked as complete only after implementation and testing. Until then, they represent planned capabilities rather than verified functionality.</p>
+<h2 id="future-enhancements">Future Enhancements</h2>
+<ul>
+<li>Integration with real-time metro passenger data.</li>
+<li>Historical revenue and occupancy analysis.</li>
+<li>Market-rate calibration using actual lease data.</li>
+<li>Campaign planning for advertisers.</li>
+<li>Advanced demand forecasting.</li>
+<li>Multi-station portfolio optimization.</li>
+</ul>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>Developed for <strong>Metro Hacks</strong>, addressing <strong>PS-06: Footfall to Revenue</strong>.</p>
+<p><strong>Project:</strong> Metro Revenue Intelligence<br>
+<strong>Domain:</strong> Data Analytics, Urban Mobility, Commercial Revenue Optimization, and AI-Assisted Reporting</p>
+
+</body>
+
+</html>
