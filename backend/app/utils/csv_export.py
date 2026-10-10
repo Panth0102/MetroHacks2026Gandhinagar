@@ -1,5 +1,6 @@
 """Safe CSV serialization: quotes fields and neutralizes spreadsheet formula
 injection (leading = + - @, tab, CR) by prefixing a single quote."""
+
 from __future__ import annotations
 
 import csv
@@ -16,7 +17,9 @@ def _sanitize(value: object) -> str:
     return s
 
 
-def to_csv(headers: Sequence[str], rows: Iterable[Sequence[object]], preamble: list[str] | None = None) -> str:
+def to_csv(
+    headers: Sequence[str], rows: Iterable[Sequence[object]], preamble: list[str] | None = None
+) -> str:
     buf = io.StringIO()
     writer = csv.writer(buf, quoting=csv.QUOTE_MINIMAL)
     if preamble:

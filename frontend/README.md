@@ -68,6 +68,22 @@ npm run preview       # serve the production build
 | `/pricing` | Rate card + price scenario calculator (CSV) | `/pricing/rate-card`, `/pricing/estimate` |
 | `/opportunities` | Ranked vacant-space opportunities | `/analytics/revenue-opportunities` |
 | `/scenarios` | Revenue scenarios | `/forecasts/revenue` |
+| `/proposals` | Saved sales proposals (list, open, PDF) | `/proposals` |
+| `/proposals/new?space_id=` | Generate a proposal from a space | `/proposals/generate`, `/inventory/{id}`, `/pricing/spaces/{id}` |
+| `/proposals/:id` | Proposal editor + live preview, save, regenerate, PDF | `/proposals/{id}` (GET/PATCH), `/regenerate`, `/pdf` |
+
+The space detail page (`/inventory/:id`) also shows rules-based **tenant category
+recommendations** and a "Generate sales proposal" action. The pricing page offers
+both a client-side CSV of the current view and an "Official CSV" from the backend
+export (with disclaimer + formula-injection protection).
+
+### Phase 3 notes
+
+- Proposal copy is drafted by the backend (AI when configured, deterministic
+  template otherwise). The editor labels AI-generated vs template-generated
+  content, keeps unsaved edits when a save fails, and warns before a regenerate
+  discards edits. AI credentials live only on the backend.
+- PDF/CSV downloads are real backend endpoints opened via direct links.
 
 ## Architecture
 

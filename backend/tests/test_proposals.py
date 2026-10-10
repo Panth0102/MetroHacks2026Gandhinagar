@@ -2,6 +2,7 @@ import io
 import json
 
 import pytest
+from pydantic import ValidationError
 from pypdf import PdfReader
 from sqlalchemy import select
 
@@ -43,12 +44,14 @@ def _context(db_session, dataset):
 
 # ---- schema validation ----
 
+
 def test_proposal_content_requires_core_fields():
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         ProposalContent(title="x")  # missing required sections
 
 
 # ---- context construction ----
+
 
 def test_context_separates_facts_and_estimates(db_session, small_dataset, active_pricing_config):
     ctx, _ = _context(db_session, small_dataset)
@@ -60,7 +63,10 @@ def test_context_separates_facts_and_estimates(db_session, small_dataset, active
 
 # ---- template fallback ----
 
-def test_template_generation_is_valid_and_grounded(db_session, small_dataset, active_pricing_config):
+
+def test_template_generation_is_valid_and_grounded(
+    db_session, small_dataset, active_pricing_config
+):
     ctx, _ = _context(db_session, small_dataset)
     content, source, model = proposal_generation_service.generate(ctx, use_ai=False)
     assert source == "template" and model is None
@@ -72,20 +78,24 @@ def test_template_generation_is_valid_and_grounded(db_session, small_dataset, ac
 
 # ---- AI path (mocked, no network) ----
 
-_GOOD_JSON = json.dumps({
-    "title": "AI Proposal for T1-S01",
-    "executive_summary": "Summary grounded in observed entries.",
-    "location_highlights": ["Central station"],
-    "verified_metrics": [{"label": "Avg daily entries", "value": "250"}],
-    "commercial_opportunity": "Opportunity text.",
-    "pricing_summary": "Indicative price, not a verified rate.",
-    "suggested_usage": "Grab-and-go kiosk.",
-    "call_to_action": "Contact the commercial team.",
-    "assumptions_and_limitations": ["Observed entries, not unique visitors."],
-})
+_GOOD_JSON = json.dumps(
+    {
+        "title": "AI Proposal for T1-S01",
+        "executive_summary": "Summary grounded in observed entries.",
+        "location_highlights": ["Central station"],
+        "verified_metrics": [{"label": "Avg daily entries", "value": "250"}],
+        "commercial_opportunity": "Opportunity text.",
+        "pricing_summary": "Indicative price, not a verified rate.",
+        "suggested_usage": "Grab-and-go kiosk.",
+        "call_to_action": "Contact the commercial team.",
+        "assumptions_and_limitations": ["Observed entries, not unique visitors."],
+    }
+)
 
 
-def test_ai_generation_parses_structured_json(db_session, small_dataset, active_pricing_config, monkeypatch):
+def test_ai_generation_parses_structured_json(
+    db_session, small_dataset, active_pricing_config, monkeypatch
+):
     ctx, _ = _context(db_session, small_dataset)
     monkeypatch.setattr(proposal_generation_service, "_llm_complete", lambda s, u: _GOOD_JSON)
     content, source, model = proposal_generation_service.generate(ctx, use_ai=True)
@@ -93,15 +103,21 @@ def test_ai_generation_parses_structured_json(db_session, small_dataset, active_
     assert content.title == "AI Proposal for T1-S01"
 
 
-def test_ai_malformed_output_falls_back_to_template(db_session, small_dataset, active_pricing_config, monkeypatch):
+def test_ai_malformed_output_falls_back_to_template(
+    db_session, small_dataset, active_pricing_config, monkeypatch
+):
     ctx, _ = _context(db_session, small_dataset)
-    monkeypatch.setattr(proposal_generation_service, "_llm_complete", lambda s, u: "not json at all")
+    monkeypatch.setattr(
+        proposal_generation_service, "_llm_complete", lambda s, u: "not json at all"
+    )
     content, source, _ = proposal_generation_service.generate(ctx, use_ai=True)
     assert source == "template"  # never mislabels a fallback as AI
     assert isinstance(content, ProposalContent)
 
 
-def test_ai_provider_error_falls_back(db_session, small_dataset, active_pricing_config, monkeypatch):
+def test_ai_provider_error_falls_back(
+    db_session, small_dataset, active_pricing_config, monkeypatch
+):
     ctx, _ = _context(db_session, small_dataset)
 
     def _boom(s, u):
@@ -114,12 +130,18 @@ def test_ai_provider_error_falls_back(db_session, small_dataset, active_pricing_
 
 # ---- persistence ----
 
+
 def test_create_list_get_update(db_session, small_dataset, active_pricing_config):
     ctx, space = _context(db_session, small_dataset)
     content, source, model = proposal_generation_service.generate(ctx, use_ai=False)
     p = proposal_service.create_proposal(
-        db_session, space=space, content=content, context=ctx, source=source,
-        ai_model=model, tenant_category="Food & beverage",
+        db_session,
+        space=space,
+        content=content,
+        context=ctx,
+        source=source,
+        ai_model=model,
+        tenant_category="Food & beverage",
     )
     assert p.reference_code.startswith("PROP-")
     rows, total = proposal_service.list_proposals(db_session, limit=10, offset=0)
@@ -138,21 +160,27 @@ def test_regenerate_uses_frozen_snapshot(db_session, small_dataset, active_prici
     ctx, space = _context(db_session, small_dataset)
     content, source, model = proposal_generation_service.generate(ctx, use_ai=False)
     p = proposal_service.create_proposal(
-        db_session, space=space, content=content, context=ctx, source=source,
-        ai_model=model, tenant_category=None,
+        db_session,
+        space=space,
+        content=content,
+        context=ctx,
+        source=source,
+        ai_model=model,
+        tenant_category=None,
     )
     snapshot_before = dict(p.context_snapshot)
-    regenerated = proposal_service.replace_content(
-        db_session, p, content, "template", None
-    )
+    regenerated = proposal_service.replace_content(db_session, p, content, "template", None)
     assert regenerated.context_snapshot == snapshot_before  # evidence frozen
 
 
 # ---- PDF ----
 
+
 def _render(content: ProposalContent) -> bytes:
     return pdf_service.render_proposal_pdf(
-        content, reference_code="PROP-TEST01", station_name="Riverfront Central",
+        content,
+        reference_code="PROP-TEST01",
+        station_name="Riverfront Central",
         space_code="T1-S01",
     )
 
@@ -168,17 +196,17 @@ def test_pdf_is_one_page_with_expected_text(db_session, small_dataset, active_pr
 
 
 def test_pdf_long_text_stays_one_page():
-    long = "VeryLongBusinessName " * 40
+    long = ("VeryLongBusinessName " * 40).strip()
     content = ProposalContent(
         title=long[:200],
-        executive_summary=long * 3,
-        location_highlights=[long] * 8,
+        executive_summary=long[:1190],
+        location_highlights=[long[:100]] * 8,
         verified_metrics=[ProposalMetric(label="Metric", value="123") for _ in range(12)],
-        commercial_opportunity=long * 3,
-        pricing_summary=long,
-        suggested_usage=long,
-        call_to_action=long,
-        assumptions_and_limitations=[long] * 10,
+        commercial_opportunity=long[:1190],
+        pricing_summary=long[:790],
+        suggested_usage=long[:790],
+        call_to_action=long[:590],
+        assumptions_and_limitations=[long[:100]] * 10,
     )
     reader = PdfReader(io.BytesIO(_render(content)))
     assert len(reader.pages) == 1
@@ -202,6 +230,7 @@ def test_pdf_missing_optional_fields_does_not_crash():
 
 # ---- API flow ----
 
+
 def test_api_generate_edit_pdf_flow(seeded_client):
     inv = seeded_client.get("/api/v1/inventory?status=vacant&limit=1").json()
     sid = inv["items"][0]["id"]
@@ -224,4 +253,7 @@ def test_api_generate_edit_pdf_flow(seeded_client):
     assert pdf.content[:4] == b"%PDF"
 
     assert seeded_client.get("/api/v1/proposals/99999").status_code == 404
-    assert seeded_client.post("/api/v1/proposals/generate", json={"space_id": 99999}).status_code == 404
+    assert (
+        seeded_client.post("/api/v1/proposals/generate", json={"space_id": 99999}).status_code
+        == 404
+    )

@@ -1,142 +1,182 @@
 # Metro Revenue Intelligence
 
-**Turning Metro Station Footfall into Revenue Opportunities**
+> Turning Metro Station Footfall into Revenue Opportunities
 
-Metro Revenue Intelligence is a data-driven platform designed to help metro operators monetize vacant retail spaces and advertising panels. It analyzes passenger footfall, identifies commercially valuable locations, recommends indicative prices, and generates data-backed sales proposals for prospective tenants and advertisers.
+A full-stack data platform that helps metro operators monetize vacant retail spaces and advertising panels. It analyzes passenger footfall, identifies commercially valuable locations, recommends indicative prices, and generates data-backed sales proposals for prospective tenants and advertisers.
 
 Built for **Metro Hacks — Problem Statement PS-06: Footfall to Revenue**.
 
 ---
 
+## Table of Contents
+
+- [Problem Statement](#problem-statement)
+- [Solution](#solution)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [API Reference](#api-reference)
+- [Environment Variables](#environment-variables)
+- [Database](#database)
+- [Testing](#testing)
+- [Disclaimer](#disclaimer)
+
+---
+
 ## Problem Statement
 
-Metro stations attract large numbers of passengers, making them valuable locations for retail businesses and advertising. However, metro operators may struggle to demonstrate the commercial value of vacant spaces and advertising panels.
+Metro stations attract large numbers of passengers daily, making them valuable locations for retail businesses and advertisers. However, metro operators often struggle to:
 
-Without clear footfall insights and data-backed pricing, it becomes difficult to set competitive rates, identify high-potential locations, and convince prospective tenants or advertisers to invest.
+- Demonstrate the commercial value of vacant spaces and advertising panels
+- Set competitive, data-backed rental rates
+- Identify high-potential locations across the network
+- Quickly generate sales proposals for prospective tenants
 
-## Our Solution
+## Solution
 
-Metro Revenue Intelligence converts station footfall data into actionable commercial insights.
+Metro Revenue Intelligence converts raw station footfall data into actionable commercial insights through a REST API backend and an interactive React dashboard.
 
-The platform aims to help metro operators understand passenger traffic patterns, evaluate vacant commercial inventory, estimate potential revenue, and generate sales proposals supported by data.
+## Features
 
-## Key Features
-
-1. **Footfall Analytics** — Analyze passenger traffic by station, date, and time to identify high-footfall locations and peak periods.
-2. **Commercial Inventory Management** — Track vacant and occupied retail spaces and advertising panels, including their locations and characteristics.
-3. **Smart Rate Cards** — Calculate explainable, indicative prices using footfall and commercial-space attributes.
-4. **Revenue Opportunity Ranking** — Rank vacant spaces by estimated commercial potential and highlight opportunities for improving revenue.
-5. **AI-Powered Sales Proposals** — Generate data-backed sales pitches and downloadable PDF proposals for prospective tenants and advertisers.
-
-## Target Users
-
-- **Metro Operators:** Improve commercial space utilization and revenue planning.
-- **Commercial Revenue Teams:** Evaluate inventory, prepare rate cards, and prioritize sales opportunities.
-- **Retail Businesses:** Identify potentially valuable locations inside metro stations.
-- **Advertisers and Agencies:** Compare advertising opportunities across stations.
-
-## Technology Stack
-
-| Component | Technology |
+| Feature | Description |
 |---|---|
-| Frontend | React, TypeScript, Vite |
-| UI and Styling | Tailwind CSS, shadcn/ui |
-| Data Visualization | Recharts |
-| Icons | Lucide |
-| Backend API | Python, FastAPI |
-| Database | PostgreSQL |
-| ORM and Migrations | SQLAlchemy, Alembic |
-| Data Analytics | Pandas, NumPy |
-| AI Integration | Claude API |
-| Testing | Pytest, Vitest, Playwright |
-| Development | Claude Code, Git, GitHub |
+| Footfall Analytics | Passenger traffic by station, date, and hour — peak periods, trends, and comparisons |
+| Commercial Inventory | Track vacant and occupied retail spaces and advertising panels |
+| Smart Rate Cards | Explainable, heuristic-based pricing using footfall and space attributes |
+| Revenue Opportunity Ranking | Rank vacant spaces by estimated commercial potential |
+| AI Sales Proposals | Generate data-backed sales pitches via Claude API with PDF export |
+| Revenue Forecasting | Scenario modelling for potential occupancy improvements |
+| Tenant Recommendations | Suggest suitable business categories based on station demographics |
 
-## System Architecture
+## Tech Stack
 
-```text
+### Backend
+| | |
+|---|---|
+| Language | Python 3.11+ |
+| Framework | FastAPI |
+| ORM | SQLAlchemy 2.0 |
+| Migrations | Alembic |
+| Database | SQLite (dev) / PostgreSQL (production) |
+| Analytics | Pandas, NumPy |
+| AI | Anthropic Claude API |
+| PDF Generation | ReportLab |
+| Testing | Pytest, pytest-cov |
+| Linting | Ruff |
+
+### Frontend
+| | |
+|---|---|
+| Framework | React 18 + TypeScript |
+| Build Tool | Vite |
+| Styling | Tailwind CSS |
+| Data Fetching | TanStack Query v5 |
+| Routing | React Router v6 |
+| Charts | Recharts |
+| Icons | Lucide React |
+| Testing | Vitest, Testing Library |
+
+## Architecture
+
+```
 Footfall Data + Commercial Inventory
-                  |
-                  v
-        FastAPI Backend
-                  |
-                  v
-      Analytics and Pricing Engine
-                  |
-          +-------+-------+
-          |               |
-          v               v
-    PostgreSQL       Revenue Insights
-          |               |
-          +-------+-------+
-                  |
-                  v
-       React Dashboard
-                  |
-                  v
-     AI Sales Proposal Generator
-                  |
-                  v
-       PDF and CSV Exports
+              │
+              ▼
+    FastAPI Backend (Python)
+              │
+    ┌─────────┴──────────┐
+    ▼                    ▼
+PostgreSQL/SQLite    Analytics &
+   (SQLAlchemy)      Pricing Engine
+    ▼                    ▼
+Alembic Migrations  Revenue Insights
+              │
+              ▼
+     REST API (/api/v1/*)
+              │
+              ▼
+   React Dashboard (Vite + TS)
+              │
+     ┌────────┴────────┐
+     ▼                 ▼
+  Analytics UI    AI Proposal
+  & Rate Cards    Generator
+                       │
+                       ▼
+                  PDF / CSV Export
 ```
 
-## How It Works
+## Project Structure
 
-1. **Load data:** Import or generate station footfall records and commercial inventory information.
-2. **Analyze traffic:** Calculate station-level passenger volumes, peak hours, and traffic trends.
-3. **Evaluate inventory:** Identify vacant retail spaces and advertising panels.
-4. **Estimate prices:** Apply a transparent pricing model to calculate indicative commercial rates.
-5. **Identify opportunities:** Rank available spaces using their estimated commercial potential.
-6. **Generate proposals:** Use validated analytics to prepare sales proposals for prospective tenants and advertisers.
-7. **Export results:** Download rate cards, analytical reports, and sales proposals in supported formats.
-
-## Data and Pricing Methodology
-
-The prototype is designed to support realistic sample data because a production metro footfall dataset may not be available during the hackathon.
-
-The analytics may include:
-
-- Station-wise passenger footfall
-- Hourly and daily traffic patterns
-- Retail and advertising inventory
-- Occupancy and vacancy status
-- Indicative rental prices
-- Potential revenue scenarios
-
-**Important:** Sample data is synthetic unless explicitly identified otherwise. Pricing recommendations and revenue forecasts are estimates for decision support, not guaranteed earnings or validated market rates.
-
-Footfall indicates potential exposure, but it does not independently establish advertising impressions, customer conversion, or actual sales.
-
-## Project Development Phases
-
-### Phase 1 — Backend and Analytics
-- Set up the backend and database.
-- Create realistic, reproducible sample datasets.
-- Implement footfall analytics and inventory management.
-- Develop explainable pricing and revenue opportunity calculations.
-- Expose analytics through REST APIs.
-
-### Phase 2 — Frontend and Integration
-- Build the interactive analytics dashboard.
-- Add station-level visualizations and inventory filters.
-- Display rate cards, vacancy rankings, and revenue scenarios.
-- Connect the frontend to the backend APIs.
-
-### Phase 3 — AI Intelligence and Reporting
-- Generate AI-assisted sales proposals.
-- Produce downloadable, one-page PDF proposals.
-- Support CSV exports and commercial reporting.
-- Add recommendations for potential tenants and advertising opportunities.
+```
+.
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── routes/
+│   │   │       ├── analytics.py       # Footfall analytics endpoints
+│   │   │       ├── footfall.py        # Raw footfall records
+│   │   │       ├── forecasts.py       # Revenue forecasting
+│   │   │       ├── health.py          # Health check
+│   │   │       ├── inventory.py       # Commercial spaces
+│   │   │       ├── pricing.py         # Rate card engine
+│   │   │       ├── proposals.py       # AI proposal generation
+│   │   │       └── stations.py        # Station management
+│   │   ├── core/
+│   │   │   ├── config.py              # Settings (pydantic-settings)
+│   │   │   └── logging.py
+│   │   ├── db/
+│   │   │   ├── base.py                # SQLAlchemy base & session
+│   │   │   └── models/                # ORM models
+│   │   ├── schemas/                   # Pydantic request/response schemas
+│   │   ├── services/                  # Business logic
+│   │   │   ├── analytics_service.py
+│   │   │   ├── footfall_service.py
+│   │   │   ├── forecasting_service.py
+│   │   │   ├── inventory_service.py
+│   │   │   ├── pdf_service.py
+│   │   │   ├── pricing_service.py
+│   │   │   ├── proposal_generation_service.py
+│   │   │   ├── proposal_service.py
+│   │   │   └── tenant_recommendation_service.py
+│   │   └── main.py
+│   ├── alembic/                       # DB migrations
+│   ├── scripts/
+│   │   ├── generate_sample_data.py    # Synthetic data generator
+│   │   └── seed_database.py           # DB seeder
+│   ├── tests/                         # Pytest test suite
+│   ├── .env.example
+│   └── pyproject.toml
+│
+└── frontend/
+    ├── src/
+    │   ├── app/                       # Router setup
+    │   ├── components/                # Shared UI components
+    │   ├── features/
+    │   │   ├── overview/              # Dashboard overview
+    │   │   ├── stations/              # Station explorer
+    │   │   ├── inventory/             # Commercial spaces
+    │   │   ├── pricing/               # Rate cards
+    │   │   ├── opportunities/         # Revenue opportunities
+    │   │   ├── proposals/             # AI proposal generator
+    │   │   └── scenarios/             # Forecast scenarios
+    │   ├── hooks/                     # Custom React hooks
+    │   ├── lib/                       # API client, query client
+    │   └── types/                     # TypeScript type definitions
+    ├── .env.example
+    └── package.json
+```
 
 ## Getting Started
 
 ### Prerequisites
 
-Install the following before running the project:
-
-- Python 3.11 or a compatible version supported by the project's dependencies
-- Node.js and npm
-- PostgreSQL
+- Python 3.11+
+- Node.js 18+ and npm
 - Git
+- PostgreSQL *(optional — SQLite works out of the box for development)*
 
 ### 1. Clone the Repository
 
@@ -145,129 +185,182 @@ git clone <YOUR_GITHUB_REPOSITORY_URL>
 cd metro-revenue-intelligence
 ```
 
-Replace the repository URL with your actual GitHub repository URL.
-
-### 2. Configure the Backend
+### 2. Backend Setup
 
 ```bash
 cd backend
+
+# Create and activate a virtual environment
 python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -e ".[dev]"
+
+# Create your .env file
+cp .env.example .env
 ```
 
-Create a `.env` file using the project's `.env.example` as a reference.
+The default `.env` uses SQLite (`metro_dev.db`) — no database server needed for development.
 
-Example configuration:
+To use PostgreSQL instead, update `DATABASE_URL` in `.env`:
 
 ```env
 DATABASE_URL=postgresql+psycopg://USER:PASSWORD@localhost:5432/metro_revenue
-ANTHROPIC_API_KEY=
 ```
 
-Replace the database credentials with your local PostgreSQL configuration. Keep API keys and credentials out of version control.
+### 3. Run Database Migrations
 
-### 3. Set Up PostgreSQL
-
-Create the project database:
-
-```sql
-CREATE DATABASE metro_revenue;
+```bash
+alembic upgrade head
 ```
 
-Run the database migrations and sample-data initialization commands documented in the backend setup instructions.
+### 4. Seed Sample Data
 
-### 4. Start the Backend
+```bash
+python scripts/seed_database.py
+```
 
-From the backend directory, activate the virtual environment and run:
+This populates the database with synthetic stations, footfall records, commercial spaces, and pricing configuration.
+
+### 5. Start the Backend
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-The API will normally be available at:
+| Endpoint | URL |
+|---|---|
+| API base | `http://127.0.0.1:8000` |
+| Interactive docs (Swagger) | `http://127.0.0.1:8000/docs` |
+| Alternative docs (ReDoc) | `http://127.0.0.1:8000/redoc` |
 
-- API base URL: `http://127.0.0.1:8000`
-- Interactive API documentation: `http://127.0.0.1:8000/docs`
+### 6. Frontend Setup
 
-### 5. Start the Frontend
-
-Open a second terminal:
+Open a **second terminal**:
 
 ```bash
 cd frontend
+
+# Install dependencies
 npm install
+
+# Create your .env file
+cp .env.example .env
+
+# Start the dev server
 npm run dev
 ```
 
-Open the local URL printed by Vite in your browser.
+Vite will print the local URL — usually `http://localhost:5173`.
 
-> **Setup note:** These commands assume the repository uses `backend/` and `frontend/` directories. Adjust them to match the actual project structure and scripts.
+---
+
+## API Reference
+
+All business endpoints are prefixed with `/api/v1`.
+
+| Route | Description |
+|---|---|
+| `GET /health` | Health check |
+| `GET /api/v1/stations` | List all metro stations |
+| `GET /api/v1/footfall` | Query footfall records |
+| `GET /api/v1/analytics` | Aggregated footfall analytics |
+| `GET /api/v1/inventory` | Commercial space inventory |
+| `GET /api/v1/pricing` | Rate card calculations |
+| `GET /api/v1/forecasts` | Revenue forecasting scenarios |
+| `POST /api/v1/proposals` | Generate an AI sales proposal |
+
+Full request/response schemas are available in the Swagger UI at `/docs`.
+
+---
+
+## Environment Variables
+
+### Backend (`backend/.env`)
+
+| Variable | Default | Description |
+|---|---|---|
+| `DATABASE_URL` | `sqlite:///./metro_dev.db` | Database connection string |
+| `ANTHROPIC_API_KEY` | *(empty)* | Claude API key for AI proposals. Leave blank for template-only mode |
+| `AI_MODEL` | `claude-sonnet-4-5` | Claude model to use |
+| `CORS_ORIGINS` | `http://localhost:5173` | Comma-separated allowed origins |
+| `LOG_LEVEL` | `INFO` | Logging verbosity |
+| `PRICING_MODEL_VERSION` | `v1.0-heuristic` | Active pricing model identifier |
+| `BASE_RATE_PER_SQM` | `1800` | Base monthly rate per m² (₹) |
+| `BASE_PANEL_RATE` | `45000` | Base monthly advertising panel rate (₹) |
+| `REFERENCE_DAILY_FOOTFALL` | `20000` | Footfall baseline for pricing normalization |
+
+### Frontend (`frontend/.env`)
+
+| Variable | Default | Description |
+|---|---|---|
+| `VITE_API_BASE_URL` | `http://localhost:8000` | Backend API base URL |
+
+---
+
+## Database
+
+The schema includes the following tables:
+
+| Table | Description |
+|---|---|
+| `stations` | Metro station master data |
+| `footfall_records` | Hourly entry/exit counts per station |
+| `commercial_spaces` | Retail and advertising inventory |
+| `leases` | Active and historical lease records |
+| `pricing_configs` | Versioned pricing model configuration |
+| `proposals` | Generated sales proposals |
+
+Migrations are managed with Alembic. To create a new migration after model changes:
+
+```bash
+alembic revision --autogenerate -m "description"
+alembic upgrade head
+```
+
+---
 
 ## Testing
 
-Run the tests supported by each project component.
-
-**Backend:**
+### Backend
 
 ```bash
-pytest
+cd backend
+source .venv/bin/activate
+pytest                    # Run all tests
+pytest --cov=app          # With coverage report
 ```
 
-**Frontend:**
+### Frontend
 
 ```bash
-npm run test
+cd frontend
+npm run test              # Single run (Vitest)
+npm run test:watch        # Watch mode
+npm run typecheck         # TypeScript type check
+npm run lint              # ESLint
 ```
 
-**Production build:**
+### Production Build
 
 ```bash
+cd frontend
 npm run build
+npm run preview
 ```
 
-Use the scripts actually defined in the repository's configuration files.
+---
 
-## Security and Reliability
+## Disclaimer
 
-- Store secrets in environment variables.
-- Validate API inputs and database operations.
-- Keep pricing calculations deterministic and explainable.
-- Use AI to communicate validated results rather than invent financial figures.
-- Handle missing data and API failures gracefully.
-- Clearly label synthetic data, assumptions, and estimates.
-- Provide an editable proposal template if AI services are not configured.
+All station and footfall data is **synthetic** unless explicitly stated otherwise. Pricing recommendations and revenue forecasts are **indicative estimates** produced by a heuristic model — they are not verified market rates or guaranteed earnings. Footfall indicates potential exposure but does not independently establish advertising impressions, customer conversion, or actual sales.
 
-## Expected Impact
-
-Metro Revenue Intelligence aims to help metro operators:
-
-- Reduce the time required to evaluate vacant commercial inventory.
-- Make pricing recommendations more consistent and transparent.
-- Prioritize potentially valuable retail and advertising locations.
-- Prepare sales materials more efficiently.
-- Make better-informed commercial revenue decisions.
-
-Actual revenue improvements would need to be validated using real footfall data, market rental rates, occupancy records, and observed commercial performance.
-
-## Current Project Status
-
-The project is being developed in three phases: backend analytics, frontend integration, and AI-assisted reporting.
-
-Features should be marked as complete only after implementation and testing. Until then, they represent planned capabilities rather than verified functionality.
-
-## Future Enhancements
-
-- Integration with real-time metro passenger data.
-- Historical revenue and occupancy analysis.
-- Market-rate calibration using actual lease data.
-- Campaign planning for advertisers.
-- Advanced demand forecasting.
-- Multi-station portfolio optimization.
+---
 
 ## Acknowledgements
 
 Developed for **Metro Hacks**, addressing **PS-06: Footfall to Revenue**.
 
 **Project:** Metro Revenue Intelligence  
-**Domain:** Data Analytics, Urban Mobility, Commercial Revenue Optimization, and AI-Assisted Reporting
+**Domain:** Data Analytics · Urban Mobility · Commercial Revenue Optimization · AI-Assisted Reporting

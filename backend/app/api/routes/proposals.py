@@ -36,8 +36,13 @@ def generate_proposal(body: ProposalGenerateRequest, db: Session = Depends(get_d
         context, use_ai=settings.ai_enabled
     )
     proposal = proposal_service.create_proposal(
-        db, space=space, content=content, context=context, source=source,
-        ai_model=ai_model, tenant_category=body.tenant_category,
+        db,
+        space=space,
+        content=content,
+        context=context,
+        source=source,
+        ai_model=ai_model,
+        tenant_category=body.tenant_category,
     )
     return ProposalOut.model_validate(proposal)
 
@@ -52,7 +57,9 @@ def list_proposals(
     rows, total = proposal_service.list_proposals(db, limit=limit, offset=offset, space_id=space_id)
     return Page(
         items=[ProposalListItem.model_validate(r) for r in rows],
-        total=total, limit=limit, offset=offset,
+        total=total,
+        limit=limit,
+        offset=offset,
     )
 
 

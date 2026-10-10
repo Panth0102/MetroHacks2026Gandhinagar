@@ -62,7 +62,9 @@ def get_space(space_id: int, db: Session = Depends(get_db)) -> SpaceOut:
 
 
 @router.get("/{space_id}/tenant-recommendations", response_model=TenantRecommendationResult)
-def tenant_recommendations(space_id: int, db: Session = Depends(get_db)) -> TenantRecommendationResult:
+def tenant_recommendations(
+    space_id: int, db: Session = Depends(get_db)
+) -> TenantRecommendationResult:
     try:
         return tenant_recommendation_service.recommend_tenants(db, space_id)
     except LookupError as exc:

@@ -1,5 +1,6 @@
 import {
   Building2,
+  FileText,
   LayoutDashboard,
   LineChart,
   Receipt,
@@ -22,4 +23,5 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/pricing", label: "Pricing & Rate Cards", icon: Tags },
   { to: "/opportunities", label: "Revenue Opportunities", icon: LineChart },
   { to: "/scenarios", label: "Revenue Scenarios", icon: Receipt },
+  { to: "/proposals", label: "Sales Proposals", icon: FileText },
 ];

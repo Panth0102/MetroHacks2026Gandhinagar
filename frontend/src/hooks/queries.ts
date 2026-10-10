@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "@/lib/api-client";
 import type {
@@ -10,10 +10,16 @@ import type {
   PeakHoursResult,
   PricingEstimate,
   PricingEstimateRequest,
+  Proposal,
+  ProposalContent,
+  ProposalGenerateRequest,
+  ProposalListItem,
+  ProposalStatus,
   RateCardItem,
   RevenueOpportunity,
   Station,
   StationFootfallRank,
+  TenantRecommendationResult,
 } from "@/types/api";
 
 export const keys = {
@@ -32,6 +38,9 @@ export const keys = {
   rateCard: (params: object) => ["pricing", "rate-card", params] as const,
   priceSpace: (id: number) => ["pricing", "space", id] as const,
   forecast: (stationId?: number) => ["forecasts", "revenue", stationId ?? "all"] as const,
+  proposals: (params: object) => ["proposals", params] as const,
+  proposal: (id: number) => ["proposals", id] as const,
+  tenantRecs: (spaceId: number) => ["tenant-recommendations", spaceId] as const,
 };
 
 export function useOverview() {
@@ -161,5 +170,69 @@ export function useEstimateMutation() {
   return useMutation({
     mutationFn: (body: PricingEstimateRequest) =>
       api.post<PricingEstimate>("/api/v1/pricing/estimate", body),
+  });
+}
+
+// ---- Phase 3: proposals + tenant recommendations ----
+
+export function useProposals(params: { space_id?: number; limit?: number; offset?: number } = {}) {
+  return useQuery({
+    queryKey: keys.proposals(params),
+    queryFn: ({ signal }) =>
+      api.get<Page<ProposalListItem>>("/api/v1/proposals", params, signal),
+  });
+}
+
+export function useProposal(id: number | undefined) {
+  return useQuery({
+    queryKey: keys.proposal(id ?? -1),
+    enabled: id !== undefined,
+    queryFn: ({ signal }) => api.get<Proposal>(`/api/v1/proposals/${id}`, undefined, signal),
+  });
+}
+
+export function useGenerateProposal() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: ProposalGenerateRequest) =>
+      api.post<Proposal>("/api/v1/proposals/generate", body),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["proposals"] }),
+  });
+}
+
+export function useUpdateProposal(id: number) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (patch: {
+      title?: string;
+      tenant_category?: string;
+      content?: ProposalContent;
+      status?: ProposalStatus;
+    }) => api.patch<Proposal>(`/api/v1/proposals/${id}`, patch),
+    onSuccess: (data) => {
+      qc.setQueryData(keys.proposal(id), data);
+      qc.invalidateQueries({ queryKey: ["proposals"] });
+    },
+  });
+}
+
+export function useRegenerateProposal(id: number) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.post<Proposal>(`/api/v1/proposals/${id}/regenerate`, {}),
+    onSuccess: (data) => qc.setQueryData(keys.proposal(id), data),
+  });
+}
+
+export function useTenantRecommendations(spaceId: number | undefined) {
+  return useQuery({
+    queryKey: keys.tenantRecs(spaceId ?? -1),
+    enabled: spaceId !== undefined,
+    queryFn: ({ signal }) =>
+      api.get<TenantRecommendationResult>(
+        `/api/v1/inventory/${spaceId}/tenant-recommendations`,
+        undefined,
+        signal,
+      ),
   });
 }

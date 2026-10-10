@@ -213,3 +213,88 @@ export interface ForecastResult {
   assumptions: string[];
   limitations: string[];
 }
+
+// ---- Phase 3: proposals, tenant recommendations ----
+
+export type ProposalStatus = "draft" | "ready_for_review" | "approved";
+
+export interface ProposalMetric {
+  label: string;
+  value: string;
+}
+
+export interface ProposalContent {
+  title: string;
+  executive_summary: string;
+  location_highlights: string[];
+  verified_metrics: ProposalMetric[];
+  commercial_opportunity: string;
+  pricing_summary: string;
+  suggested_usage: string;
+  call_to_action: string;
+  assumptions_and_limitations: string[];
+}
+
+export interface Proposal {
+  id: number;
+  reference_code: string;
+  space_id: number;
+  station_id: number;
+  title: string;
+  tenant_category: string | null;
+  status: ProposalStatus;
+  content: ProposalContent;
+  context_snapshot: {
+    station: Record<string, unknown>;
+    space: Record<string, unknown>;
+    footfall: Record<string, unknown>;
+    pricing: Record<string, unknown>;
+    user_input: Record<string, unknown>;
+  };
+  pricing_model_version: string | null;
+  generation_source: string;
+  ai_model: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProposalListItem {
+  id: number;
+  reference_code: string;
+  space_id: number;
+  station_id: number;
+  title: string;
+  tenant_category: string | null;
+  status: ProposalStatus;
+  generation_source: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProposalGenerateRequest {
+  space_id: number;
+  tenant_category?: string | null;
+  business_name?: string | null;
+  campaign_objective?: string | null;
+  target_audience?: string | null;
+  budget?: number | null;
+  language?: string;
+}
+
+export interface TenantRecommendation {
+  category: string;
+  score: number;
+  confidence: string;
+  evidence: string[];
+  compatibility: string[];
+  missing_information: string[];
+  limitations: string[];
+}
+
+export interface TenantRecommendationResult {
+  space_id: number;
+  space_code: string;
+  station_name: string;
+  recommendations: TenantRecommendation[];
+  notes: string[];
+}

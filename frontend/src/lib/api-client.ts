@@ -70,6 +70,10 @@ async function request<T>(
 
 export const api = {
   baseUrl: BASE_URL,
+  /** Absolute URL for file endpoints (PDF/CSV) opened/downloaded directly by the browser. */
+  downloadUrl(path: string, params?: Record<string, QueryValue>): string {
+    return `${BASE_URL}${path}${buildQuery(params)}`;
+  },
   get<T>(
     path: string,
     params?: Record<string, QueryValue>,
@@ -81,6 +85,13 @@ export const api = {
     return request<T>(
       path,
       { method: "POST", body: JSON.stringify(body) },
+      signal,
+    );
+  },
+  patch<T>(path: string, body: unknown, signal?: AbortSignal): Promise<T> {
+    return request<T>(
+      path,
+      { method: "PATCH", body: JSON.stringify(body) },
       signal,
     );
   },

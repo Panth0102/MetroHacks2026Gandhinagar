@@ -4,6 +4,7 @@ Everything here is deterministic and sourced from the database / pricing engine.
 Observed facts (footfall, area) are kept separate from estimates (indicative price)
 so the generator can never present an estimate as a guaranteed figure.
 """
+
 from __future__ import annotations
 
 from sqlalchemy.orm import Session
@@ -14,7 +15,9 @@ from app.schemas.proposal import ProposalContext, ProposalGenerateRequest
 from app.services import footfall_service, pricing_service
 
 
-def build_context(db: Session, req: ProposalGenerateRequest) -> tuple[ProposalContext, CommercialSpace]:
+def build_context(
+    db: Session, req: ProposalGenerateRequest
+) -> tuple[ProposalContext, CommercialSpace]:
     space = db.get(CommercialSpace, req.space_id)
     if space is None:
         raise LookupError("Commercial space not found")

@@ -9,6 +9,7 @@ them into prose. It never invents demographics, impressions, conversions, or
 guaranteed revenue. `_llm_complete` is the single external call site and is
 monkeypatched in tests, so the suite never makes a live API call.
 """
+
 from __future__ import annotations
 
 import json
@@ -159,8 +160,7 @@ def build_template_content(context: ProposalContext) -> ProposalContent:
         f"The space suits {category}"
         + (f" (e.g. {business})" if business else "")
         + f". Steady commuter flow at {st['name']} offers consistent visibility for an on-site "
-        f"{space_type}."
-        + (f" Target audience noted: {ui['target_audience']}." if audience else "")
+        f"{space_type}." + (f" Target audience noted: {ui['target_audience']}." if audience else "")
     )
 
     if available and price is not None:
@@ -190,7 +190,9 @@ def build_template_content(context: ProposalContext) -> ProposalContent:
         "Footfall figures are observed station entries, not unique visitors or advertising "
         "impressions."
     )
-    limitations.append("Figures are from synthetic demonstration data and are not official statistics.")
+    limitations.append(
+        "Figures are from synthetic demonstration data and are not official statistics."
+    )
 
     title = (
         f"{business} — {st['name']} {space_type} proposal"

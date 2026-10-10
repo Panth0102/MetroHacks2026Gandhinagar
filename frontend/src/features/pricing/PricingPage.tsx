@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { TBody, TD, TH, THead, TR, Table } from "@/components/ui/table";
 import { useRateCard } from "@/hooks/queries";
+import { api } from "@/lib/api-client";
 import { downloadCsv } from "@/lib/csv";
 import { formatCurrency, formatNumber, labelSpaceType, labelStatus } from "@/lib/formatters";
 import type { SpaceType } from "@/types/api";
@@ -77,9 +78,20 @@ export function PricingPage() {
       <Section
         title={`Rate card${modelVersion ? ` — model ${modelVersion}` : ""}`}
         action={
-          <Button variant="outline" size="sm" onClick={exportCsv} disabled={rows.length === 0}>
-            <Download className="h-4 w-4" aria-hidden="true" /> Export CSV
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={exportCsv} disabled={rows.length === 0}>
+              <Download className="h-4 w-4" aria-hidden="true" /> Export view (CSV)
+            </Button>
+            <a
+              href={api.downloadUrl("/api/v1/pricing/rate-card.csv", {
+                station_id: stationId,
+                vacant_only: availability === "vacant",
+              })}
+              className="inline-flex h-8 items-center gap-2 rounded-md border border-input bg-surface px-3 text-sm font-medium hover:bg-muted/60"
+            >
+              <Download className="h-4 w-4" aria-hidden="true" /> Official CSV
+            </a>
+          </div>
         }
       >
         <Card className="mb-4">

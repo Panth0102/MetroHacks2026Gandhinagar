@@ -4,6 +4,7 @@ Deterministic and evidence-only: scores come from space type, area, visibility,
 and observed footfall. It never infers passenger demographics, income, or buying
 intent. An LLM may later narrate these results but must not alter the evidence.
 """
+
 from __future__ import annotations
 
 from sqlalchemy.orm import Session
@@ -15,18 +16,48 @@ from app.services import footfall_service, pricing_service
 
 # category -> rule: applicable space types, footfall sensitivity, inputs it relies on
 _CATEGORIES = [
-    {"name": "Food & beverage (grab-and-go)", "types": {"retail", "kiosk"},
-     "footfall_weight": 0.6, "uses_area": True, "uses_visibility": False},
-    {"name": "Convenience retail", "types": {"retail", "kiosk"},
-     "footfall_weight": 0.5, "uses_area": True, "uses_visibility": False},
-    {"name": "Consumer electronics accessories", "types": {"retail"},
-     "footfall_weight": 0.4, "uses_area": True, "uses_visibility": True},
-    {"name": "Local brands / specialty retail", "types": {"retail", "kiosk"},
-     "footfall_weight": 0.3, "uses_area": True, "uses_visibility": False},
-    {"name": "Brand-awareness advertising", "types": {"advertising_panel", "digital_screen"},
-     "footfall_weight": 0.7, "uses_area": False, "uses_visibility": True},
-    {"name": "Digital / experiential advertising", "types": {"digital_screen"},
-     "footfall_weight": 0.8, "uses_area": False, "uses_visibility": True},
+    {
+        "name": "Food & beverage (grab-and-go)",
+        "types": {"retail", "kiosk"},
+        "footfall_weight": 0.6,
+        "uses_area": True,
+        "uses_visibility": False,
+    },
+    {
+        "name": "Convenience retail",
+        "types": {"retail", "kiosk"},
+        "footfall_weight": 0.5,
+        "uses_area": True,
+        "uses_visibility": False,
+    },
+    {
+        "name": "Consumer electronics accessories",
+        "types": {"retail"},
+        "footfall_weight": 0.4,
+        "uses_area": True,
+        "uses_visibility": True,
+    },
+    {
+        "name": "Local brands / specialty retail",
+        "types": {"retail", "kiosk"},
+        "footfall_weight": 0.3,
+        "uses_area": True,
+        "uses_visibility": False,
+    },
+    {
+        "name": "Brand-awareness advertising",
+        "types": {"advertising_panel", "digital_screen"},
+        "footfall_weight": 0.7,
+        "uses_area": False,
+        "uses_visibility": True,
+    },
+    {
+        "name": "Digital / experiential advertising",
+        "types": {"digital_screen"},
+        "footfall_weight": 0.8,
+        "uses_area": False,
+        "uses_visibility": True,
+    },
 ]
 
 
@@ -36,9 +67,7 @@ def _confidence(hits: int, total: int) -> str:
     return "medium" if hits >= 1 else "low"
 
 
-def recommend_tenants(
-    db: Session, space_id: int, limit: int = 4
-) -> TenantRecommendationResult:
+def recommend_tenants(db: Session, space_id: int, limit: int = 4) -> TenantRecommendationResult:
     space = db.get(CommercialSpace, space_id)
     if space is None:
         raise LookupError("Commercial space not found")

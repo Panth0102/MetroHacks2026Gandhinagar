@@ -4,6 +4,7 @@ Canvas (not auto-flowing Platypus) is used deliberately so output is ALWAYS a
 single page: text is wrapped and truncated to fit fixed regions, and the page is
 finished exactly once. Text is drawn as plain strings (no HTML interpreted).
 """
+
 from __future__ import annotations
 
 import io
@@ -54,8 +55,15 @@ class _Cursor:
         return self.y - needed > BOTTOM
 
     def text_block(
-        self, text: str, size: float, *, font: str = "Helvetica", color=INK,
-        leading: float | None = None, max_lines: int = 100, indent: float = 0,
+        self,
+        text: str,
+        size: float,
+        *,
+        font: str = "Helvetica",
+        color=INK,
+        leading: float | None = None,
+        max_lines: int = 100,
+        indent: float = 0,
     ) -> None:
         if not text or not self.room():
             return
@@ -81,8 +89,14 @@ class _Cursor:
         self.y -= 13
 
 
-def render_proposal_pdf(content: ProposalContent, *, reference_code: str,
-                        station_name: str, space_code: str, synthetic: bool = True) -> bytes:
+def render_proposal_pdf(
+    content: ProposalContent,
+    *,
+    reference_code: str,
+    station_name: str,
+    space_code: str,
+    synthetic: bool = True,
+) -> bytes:
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=A4)
     c.setTitle(content.title)
@@ -93,7 +107,9 @@ def render_proposal_pdf(content: ProposalContent, *, reference_code: str,
     c.rect(MARGIN, PAGE_H - MARGIN + 4, CONTENT_W, 3, fill=1, stroke=0)
     c.setFont("Helvetica", 8)
     c.setFillColorRGB(*MUTED)
-    c.drawRightString(PAGE_W - MARGIN, PAGE_H - MARGIN - 6, f"{reference_code}  ·  {date.today().isoformat()}")
+    c.drawRightString(
+        PAGE_W - MARGIN, PAGE_H - MARGIN - 6, f"{reference_code}  ·  {date.today().isoformat()}"
+    )
 
     cur.space(6)
     cur.text_block(content.title, 16, font="Helvetica-Bold", color=INK, leading=19, max_lines=2)

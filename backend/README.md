@@ -294,3 +294,96 @@ Money fields are strings (Decimal). Enums: `space_type` ∈
 
 See `data/sample/README.txt` (after generation) for the synthetic dataset summary.
 
+---
+
+## 12. Phase 3 — AI sales proposals, PDF, exports, recommendations
+
+New dependencies: `reportlab` (PDF), `anthropic` (AI), `pypdf` (test-only).
+
+Run the new migration after upgrading dependencies:
+
+```bash
+pip install -e ".[dev]"
+alembic upgrade head          # adds the `proposals` table
+```
+
+### AI provider configuration (optional)
+
+Set these in `.env` (server-side only — never exposed to the browser):
+
+```
+ANTHROPIC_API_KEY=sk-...      # blank = template-only mode
+AI_MODEL=claude-sonnet-4-5
+AI_REQUEST_TIMEOUT=30
+AI_MAX_TOKENS=1500
+AI_MAX_RETRIES=2
+```
+
+**Works without AI credentials.** When `ANTHROPIC_API_KEY` is blank — or a live
+call fails/returns malformed JSON — generation falls back to a deterministic,
+evidence-only template and labels the proposal `generation_source = "template"`.
+It never claims an AI draft when the template was used. The AI path requests
+strict JSON, validates it against `ProposalContent`, and retries up to
+`AI_MAX_RETRIES` on malformed output. Tests mock the single external call site
+(`proposal_generation_service._llm_complete`), so the suite makes no live calls.
+
+### How a proposal is generated
+
+1. `proposal_context_service.build_context` assembles a validated context from the
+   DB + pricing engine, keeping observed facts (footfall, area) separate from
+   estimates (indicative price). It never fabricates footfall/area/visibility.
+2. `proposal_generation_service.generate` produces a validated `ProposalContent`
+   (AI or template).
+3. `proposal_service.create_proposal` persists it with a **frozen
+   `context_snapshot`** so later footfall/price changes never rewrite history.
+4. `pdf_service.render_proposal_pdf` renders a single-page A4 PDF (canvas-based;
+   text wrapped/truncated to guarantee exactly one page; selectable text).
+
+Editable fields on a saved proposal are restricted to title, tenant_category,
+content sections, and status (`draft` → `ready_for_review` → `approved`).
+Verified metrics are backend facts and are not user-editable.
+
+### New / changed endpoints
+
+| Method | Path | Purpose |
+|---|---|---|
+| POST | `/api/v1/proposals/generate` | Build context + generate + save (201) |
+| GET | `/api/v1/proposals` | List proposals (paginated) |
+| GET | `/api/v1/proposals/{id}` | Full proposal (content + snapshot) |
+| PATCH | `/api/v1/proposals/{id}` | Edit title/category/content/status (restricted) |
+| POST | `/api/v1/proposals/{id}/regenerate` | Regenerate copy from the frozen snapshot |
+| GET | `/api/v1/proposals/{id}/pdf` | One-page A4 PDF (`application/pdf`) |
+| GET | `/api/v1/inventory/{space_id}/tenant-recommendations` | Rules-based category suggestions |
+| GET | `/api/v1/pricing/rate-card.csv` | Injection-safe CSV with disclaimer preamble |
+
+### Tenant recommendation methodology
+
+Transparent, deterministic rules in `tenant_recommendation_service`: a base score
+for space-type match, plus bounded contributions from observed footfall (vs the
+configured reference), area, and visibility. Confidence reflects input
+completeness. Each result carries its evidence, compatibility, missing
+information, and limitations. It never infers demographics, income, or buying
+intent, and advertising categories are only offered for panel/screen types.
+
+### CSV safety
+
+`utils/csv_export.to_csv` quotes fields and neutralizes spreadsheet formula
+injection (leading `= + - @`, tab, CR → prefixed with `'`). The rate-card CSV
+carries a generation date, an indicative-vs-contractual disclaimer, and a
+synthetic-data note, and matches the `/pricing/rate-card` JSON rows.
+
+### Phase 3 security notes
+
+AI credentials are read from server env only and never returned to clients;
+prompts/secrets are not logged. Editable proposal fields are whitelisted; the
+context snapshot and provenance are immutable. PDF/CSV text is escaped. There is
+still **no authentication** — document and add authz before any real deployment.
+
+### Not implemented in Phase 3 (documented)
+
+- Advertiser campaign / station-package builder (Priority 3, secondary) — the
+  pricing + inventory endpoints provide the data to add it later.
+- Statistically trained/holdout forecasting — the data is synthetic and scenario
+  estimates remain the honest choice; labelled as estimates, not forecasts.
+
+

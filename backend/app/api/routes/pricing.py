@@ -76,17 +76,27 @@ def rate_card_csv(
     """Same filtered rate-card data as /rate-card, exported as injection-safe CSV."""
     items = _build_rate_card(db, station_id, vacant_only, limit)
     headers = [
-        "Station", "Space code", "Space type", "Status", "Area (sqm)",
-        "Observed daily footfall", "Indicative monthly price (asking)",
-        "Pricing model version", "Data quality",
+        "Station",
+        "Space code",
+        "Space type",
+        "Status",
+        "Area (sqm)",
+        "Observed daily footfall",
+        "Indicative monthly price (asking)",
+        "Pricing model version",
+        "Data quality",
     ]
     rows = [
         [
-            it.station_name, it.space_code, it.space_type.value, it.status,
+            it.station_name,
+            it.space_code,
+            it.space_type.value,
+            it.status,
             it.area_sqm if it.area_sqm is not None else "",
             it.observed_daily_footfall if it.observed_daily_footfall is not None else "",
             it.indicative_monthly_price if it.available else "unavailable",
-            it.model_version, it.data_quality,
+            it.model_version,
+            it.data_quality,
         ]
         for it in items
     ]

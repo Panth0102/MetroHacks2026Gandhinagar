@@ -1,12 +1,18 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, FileText } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 
 import { QueryState } from "@/components/feedback/state";
 import { PricingBreakdown } from "@/components/pricing/pricing-breakdown";
 import { Section } from "@/components/layout/page";
-import { Badge, statusTone } from "@/components/ui/badge";
+import { Badge, qualityTone, statusTone } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useFootfallSummary, usePriceSpace, useSpace, useStation } from "@/hooks/queries";
+import {
+  useFootfallSummary,
+  usePriceSpace,
+  useSpace,
+  useStation,
+  useTenantRecommendations,
+} from "@/hooks/queries";
 import {
   formatDate,
   formatHour,
@@ -21,6 +27,58 @@ function Field({ label, value }: { label: string; value: React.ReactNode }) {
       <dt className="text-xs uppercase tracking-wide text-muted-foreground">{label}</dt>
       <dd className="mt-0.5 text-sm font-medium text-foreground">{value}</dd>
     </div>
+  );
+}
+
+function TenantRecommendations({ spaceId }: { spaceId: number }) {
+  const query = useTenantRecommendations(spaceId);
+  return (
+    <QueryState
+      query={query}
+      isEmpty={(r) => r.recommendations.length === 0}
+      emptyTitle="No category recommendations"
+      emptyHint="No rules-based category matches this space type."
+    >
+      {(res) => (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {res.recommendations.map((r) => (
+            <Card key={r.category}>
+              <CardHeader>
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle>{r.category}</CardTitle>
+                  <Badge tone={qualityTone(r.confidence)}>{r.confidence} confidence</Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm">
+                <p className="text-xs text-muted-foreground">
+                  Compatibility score {(r.score * 100).toFixed(0)} / 100
+                </p>
+                {r.evidence.length > 0 && (
+                  <div>
+                    <p className="font-medium">Evidence</p>
+                    <ul className="list-inside list-disc text-muted-foreground">
+                      {r.evidence.map((e, i) => (
+                        <li key={i}>{e}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {r.missing_information.length > 0 && (
+                  <div>
+                    <p className="font-medium">Missing information</p>
+                    <ul className="list-inside list-disc text-muted-foreground">
+                      {r.missing_information.map((m, i) => (
+                        <li key={i}>{m}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </QueryState>
   );
 }
 
@@ -45,12 +103,18 @@ export function SpaceDetailPage() {
       <QueryState query={space}>
         {(sp) => (
           <>
-            <div className="mb-6">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-3">
                 <h2 className="text-xl font-semibold">{sp.space_code}</h2>
                 <Badge tone={statusTone(sp.status)}>{labelStatus(sp.status)}</Badge>
                 <Badge tone="neutral">{labelSpaceType(sp.space_type)}</Badge>
               </div>
+              <Link
+                to={`/proposals/new?space_id=${sp.id}`}
+                className="inline-flex h-10 items-center gap-2 rounded-md bg-accent px-4 text-sm font-medium text-accent-foreground hover:bg-accent/90"
+              >
+                <FileText className="h-4 w-4" aria-hidden="true" /> Generate sales proposal
+              </Link>
             </div>
 
             <Section>
@@ -126,6 +190,10 @@ export function SpaceDetailPage() {
 
             <Section title="Indicative pricing recommendation">
               <QueryState query={pricing}>{(est) => <PricingBreakdown estimate={est} />}</QueryState>
+            </Section>
+
+            <Section title="Suggested tenant categories">
+              <TenantRecommendations spaceId={sp.id} />
             </Section>
           </>
         )}

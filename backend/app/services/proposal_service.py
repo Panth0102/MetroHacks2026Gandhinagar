@@ -1,5 +1,6 @@
 """Proposal persistence. Restricts which fields callers may edit and freezes a
 context snapshot at generation time so historical proposals never silently change."""
+
 from __future__ import annotations
 
 import uuid
@@ -85,8 +86,9 @@ def update_proposal(db: Session, proposal: Proposal, patch: ProposalUpdate) -> P
     return proposal
 
 
-def replace_content(db: Session, proposal: Proposal, content: ProposalContent, source: str,
-                    ai_model: str | None) -> Proposal:
+def replace_content(
+    db: Session, proposal: Proposal, content: ProposalContent, source: str, ai_model: str | None
+) -> Proposal:
     """Used by regeneration: swap body + provenance, keep the same record/snapshot."""
     proposal.content = content.model_dump(mode="json")
     proposal.title = content.title
