@@ -49,6 +49,7 @@ def rate_card(
                 area_sqm=sp.area_sqm,
                 observed_daily_footfall=round(daily, 2) if daily is not None else None,
                 indicative_monthly_price=est.indicative_monthly_price,
+                model_version=est.model_version,
                 data_quality=est.data_quality,
                 available=est.available,
             )

@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 210 20% 98%;
+  --foreground: 222 32% 16%;
+  --surface: 0 0% 100%;
+  --muted: 215 24% 95%;
+  --muted-foreground: 215 16% 42%;
+  --border: 214 20% 89%;
+  --input: 214 20% 86%;
+  --ring: 222 68% 50%;
+  /* One disciplined accent (indigo-blue) for primary actions & selection. */
+  --accent: 222 68% 46%;
+  --accent-foreground: 0 0% 100%;
+  --success: 152 55% 36%;
+  --warning: 36 90% 44%;
+  --danger: 0 68% 48%;
+  --radius: 0.625rem;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Visible focus for keyboard users. */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Numeric tables read better with tabular figures. */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

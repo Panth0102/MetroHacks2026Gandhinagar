@@ -35,6 +35,18 @@ class Settings(BaseSettings):
     # Timezone the stored dates/time-bands represent (naive local metro time).
     timezone: str = "Asia/Kolkata"
 
+    # ---- AI provider (Anthropic Claude) for sales-proposal copy ----
+    # Credentials stay server-side only; never exposed to the browser.
+    anthropic_api_key: str | None = None
+    ai_model: str = "claude-sonnet-4-5"
+    ai_request_timeout: float = 30.0
+    ai_max_tokens: int = 1500
+    ai_max_retries: int = 2
+
+    @property
+    def ai_enabled(self) -> bool:
+        return bool(self.anthropic_api_key)
+
     # ---- Default pricing assumptions (indicative, not market-verified) ----
     pricing_model_version: str = "v1.0-heuristic"
     base_rate_per_sqm: float = 1800.0  # INR / sqm / month, area-priced spaces

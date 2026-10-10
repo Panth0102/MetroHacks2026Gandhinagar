@@ -60,5 +60,6 @@ class RateCardItem(BaseModel):
     area_sqm: Decimal | None = None
     observed_daily_footfall: float | None = None
     indicative_monthly_price: Decimal | None = None
+    model_version: str
     data_quality: str
     available: bool

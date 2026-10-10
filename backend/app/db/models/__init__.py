@@ -9,6 +9,7 @@ from app.db.models.commercial_space import (
 from app.db.models.footfall import FootfallRecord
 from app.db.models.lease import Lease, LeaseStatus
 from app.db.models.pricing import PricingConfig
+from app.db.models.proposal import Proposal, ProposalStatus
 from app.db.models.station import Station
 
 __all__ = [
@@ -21,4 +22,6 @@ __all__ = [
     "Lease",
     "LeaseStatus",
     "PricingConfig",
+    "Proposal",
+    "ProposalStatus",
 ]
